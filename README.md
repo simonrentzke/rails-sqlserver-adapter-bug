@@ -1,24 +1,111 @@
-# README
+### Reproduce SQLServer Bug
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+1. Set env vars 
 
-Things you may want to cover:
+```ruby
 
-* Ruby version
+ENV['DATABASE_USER']='sqlserver' 
+ENV['DATABASE_PASSWORD']='<secret>' 
+ENV['POSTGRES_DATABASE_USER']='postgres'
+ENV['POSTGRES_DATABASE_PASSWORD']='<secret>'
 
-* System dependencies
+```
 
-* Configuration
+2. Run `RAILS_ENV=test rails db:create`
 
-* Database creation
+3. Run `RAILS_ENV=test rails db:migrate --trace` and see error:
 
-* Database initialization
+```
+** Execute db:migrate
+rails aborted!
+TypeError: can't cast ActiveRecord::ConnectionAdapters::SQLServer::Type::Data
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/connection_adapters/abstract/quoting.rb:246:in `_type_cast'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/connection_adapters/postgresql/quoting.rb:162:in `_type_cast'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/connection_adapters/abstract/quoting.rb:43:in `type_cast'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/connection_adapters/abstract/quoting.rb:205:in `block in type_casted_binds'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/connection_adapters/abstract/quoting.rb:203:in `map'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/connection_adapters/abstract/quoting.rb:203:in `type_casted_binds'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/connection_adapters/postgresql_adapter.rb:669:in `exec_no_cache'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/connection_adapters/postgresql_adapter.rb:649:in `execute_and_clear'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/connection_adapters/postgresql/database_statements.rb:53:in `exec_query'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/connection_adapters/abstract/database_statements.rb:136:in `exec_insert'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/connection_adapters/postgresql/database_statements.rb:91:in `exec_insert'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/connection_adapters/abstract/database_statements.rb:171:in `insert'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/connection_adapters/abstract/query_cache.rb:22:in `insert'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/persistence.rb:375:in `_insert_record'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/persistence.rb:929:in `_create_record'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/counter_cache.rb:166:in `_create_record'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/locking/optimistic.rb:79:in `_create_record'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/attribute_methods/dirty.rb:201:in `_create_record'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/callbacks.rb:461:in `block in _create_record'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activesupport-6.1.4/lib/active_support/callbacks.rb:98:in `run_callbacks'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activesupport-6.1.4/lib/active_support/callbacks.rb:824:in `_run_create_callbacks'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/callbacks.rb:461:in `_create_record'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/timestamp.rb:108:in `_create_record'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/persistence.rb:900:in `create_or_update'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/callbacks.rb:457:in `block in create_or_update'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activesupport-6.1.4/lib/active_support/callbacks.rb:98:in `run_callbacks'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activesupport-6.1.4/lib/active_support/callbacks.rb:824:in `_run_save_callbacks'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/callbacks.rb:457:in `create_or_update'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/timestamp.rb:126:in `create_or_update'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/persistence.rb:507:in `save!'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/validations.rb:53:in `save!'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/transactions.rb:302:in `block in save!'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/transactions.rb:354:in `block in with_transaction_returning_status'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/connection_adapters/abstract/database_statements.rb:318:in `transaction'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/transactions.rb:350:in `with_transaction_returning_status'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/transactions.rb:302:in `save!'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/suppressor.rb:48:in `save!'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/persistence.rb:639:in `block in update!'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/transactions.rb:354:in `block in with_transaction_returning_status'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/connection_adapters/abstract/database_statements.rb:320:in `block in transaction'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/connection_adapters/abstract/transaction.rb:319:in `block in within_new_transaction'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activesupport-6.1.4/lib/active_support/concurrency/load_interlock_aware_monitor.rb:26:in `block (2 levels) in synchronize'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activesupport-6.1.4/lib/active_support/concurrency/load_interlock_aware_monitor.rb:25:in `handle_interrupt'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activesupport-6.1.4/lib/active_support/concurrency/load_interlock_aware_monitor.rb:25:in `block in synchronize'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activesupport-6.1.4/lib/active_support/concurrency/load_interlock_aware_monitor.rb:21:in `handle_interrupt'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activesupport-6.1.4/lib/active_support/concurrency/load_interlock_aware_monitor.rb:21:in `synchronize'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/connection_adapters/abstract/transaction.rb:317:in `within_new_transaction'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/connection_adapters/abstract/database_statements.rb:320:in `transaction'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/transactions.rb:350:in `with_transaction_returning_status'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/persistence.rb:637:in `update!'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/internal_metadata.rb:33:in `[]='
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/migration.rb:1310:in `record_environment'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/migration.rb:1303:in `migrate_without_lock'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/migration.rb:1251:in `block in migrate'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/migration.rb:1401:in `block in with_advisory_lock'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/migration.rb:1416:in `block in with_advisory_lock_connection'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/connection_adapters/abstract/connection_pool.rb:462:in `with_connection'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/migration.rb:1416:in `with_advisory_lock_connection'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/migration.rb:1397:in `with_advisory_lock'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/migration.rb:1251:in `migrate'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/migration.rb:1086:in `up'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/migration.rb:1061:in `migrate'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/tasks/database_tasks.rb:237:in `migrate'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/railties/databases.rake:92:in `block (3 levels) in <top (required)>'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/railties/databases.rake:90:in `each'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/activerecord-6.1.4/lib/active_record/railties/databases.rake:90:in `block (2 levels) in <top (required)>'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/rake-13.0.6/lib/rake/task.rb:281:in `block in execute'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/rake-13.0.6/lib/rake/task.rb:281:in `each'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/rake-13.0.6/lib/rake/task.rb:281:in `execute'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/rake-13.0.6/lib/rake/task.rb:219:in `block in invoke_with_call_chain'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/rake-13.0.6/lib/rake/task.rb:199:in `synchronize'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/rake-13.0.6/lib/rake/task.rb:199:in `invoke_with_call_chain'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/rake-13.0.6/lib/rake/task.rb:188:in `invoke'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/rake-13.0.6/lib/rake/application.rb:160:in `invoke_task'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/rake-13.0.6/lib/rake/application.rb:116:in `block (2 levels) in top_level'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/rake-13.0.6/lib/rake/application.rb:116:in `each'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/rake-13.0.6/lib/rake/application.rb:116:in `block in top_level'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/rake-13.0.6/lib/rake/application.rb:125:in `run_with_threads'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/rake-13.0.6/lib/rake/application.rb:110:in `top_level'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/railties-6.1.4/lib/rails/commands/rake/rake_command.rb:24:in `block (2 levels) in perform'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/rake-13.0.6/lib/rake/application.rb:186:in `standard_exception_handling'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/railties-6.1.4/lib/rails/commands/rake/rake_command.rb:24:in `block in perform'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/rake-13.0.6/lib/rake/rake_module.rb:59:in `with_application'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/railties-6.1.4/lib/rails/commands/rake/rake_command.rb:18:in `perform'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/railties-6.1.4/lib/rails/command.rb:50:in `invoke'
+/Users/user_xyz/.gem/ruby/3.0.1/gems/railties-6.1.4/lib/rails/commands.rb:18:in `<top (required)>'
+```
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+4. If you migrate each individualy, it works correctly, i.e `rails db:migrate:primary' `rails db:migrate:postgres`
+6. If you have a schema already, you can also reproduce error by doing a `rails db:schema:load`
