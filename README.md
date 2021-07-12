@@ -107,5 +107,5 @@ TypeError: can't cast ActiveRecord::ConnectionAdapters::SQLServer::Type::Data
 /Users/user_xyz/.gem/ruby/3.0.1/gems/railties-6.1.4/lib/rails/commands.rb:18:in `<top (required)>'
 ```
 
-4. If you migrate each individualy, it works correctly, i.e `rails db:migrate:primary' `rails db:migrate:postgres`
+4. If you migrate each individualy, it works correctly, i.e `rails db:migrate:primary` `rails db:migrate:postgres`
 6. If you have a schema already, you can also reproduce error by doing a `rails db:schema:load`
