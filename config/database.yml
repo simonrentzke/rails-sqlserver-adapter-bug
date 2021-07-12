@@ -1,0 +1,40 @@
+shared_defaults: &shared_defaults
+  adapter: sqlserver
+  prepared_statements: false
+  reconnect: true
+  host: <%= ENV.fetch('DATABASE_HOST', '0.0.0.0') %>
+  port: <%= ENV.fetch('DATABASE_PORT', 1433) %>
+  username: <%= ENV.fetch('DATABASE_USER') %>
+  password: <%= ENV.fetch('DATABASE_PASSWORD').inspect %>
+
+postgres_shared_defaults: &postgres_shared_defaults
+  adapter: postgresql
+  host: <%= ENV.fetch('POSTGRES_DATABASE_HOST', '0.0.0.0') %>
+  port: <%= ENV.fetch('POSTGRES_DATABASE_PORT', 5432) %>
+  username: <%= ENV.fetch('POSTGRES_DATABASE_USER') %>
+  password: <%= ENV.fetch('POSTGRES_DATABASE_PASSWORD').inspect %>
+  migrations_paths: db/postgres_migrate
+
+development:
+  primary:
+    <<: *shared_defaults
+    database: dogs_dev
+  postgres:
+    <<: *postgres_shared_defaults
+    database: cats_dev
+
+test:
+  primary:
+    <<: *shared_defaults
+    database: animals_test
+  postgres:
+    <<: *postgres_shared_defaults
+    database: cats_test
+
+production:
+  primary:
+    <<: *shared_defaults
+    database: animals_prod
+  postgres:
+    <<: *postgres_shared_defaults
+    database: cats_prod
